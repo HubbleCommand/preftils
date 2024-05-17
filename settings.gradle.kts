@@ -1,3 +1,6 @@
+include(":app")
+include(":preftils")
+
 pluginManagement {
     repositories {
         google()
@@ -16,5 +19,3 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "preftils"
-include(":app")
-include(":preftils")
