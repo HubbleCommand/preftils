@@ -1,5 +1,7 @@
 # Preftils - Kotlin Android Shared Preference Utils
 
+Available [here](https://jitpack.io/#HubbleCommand/preftils).
+
 This is a very simple library that reduces some verbosity when handling [SharedPreferences](https://developer.android.com/training/data-storage/shared-preferences) in Android, as well as providing type safety.
 
 While the newer [DataStore](https://developer.android.com/topic/libraries/architecture/datastore) exists, it seems to have the same pitfall of preference keys not being safely typed to their underlying data type.
