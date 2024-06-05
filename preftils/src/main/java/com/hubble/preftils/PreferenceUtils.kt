@@ -1,7 +1,12 @@
 package com.hubble.preftils
 
-
 import android.content.SharedPreferences
+
+interface ICodable {
+    fun encode(): String
+    @Throws
+    fun decode(string: String): ICodable
+}
 
 data class Preference<T>(val key: String, val default: T)
 
@@ -14,6 +19,10 @@ inline fun <reified T> SharedPreferences.get(preference: Preference<T>): T {
         is Long -> this.getLong(preference.key, preference.default) as T
         is Boolean -> this.getBoolean(preference.key, preference.default) as T
         is Float -> this.getFloat(preference.key, preference.default) as T
+        is ICodable -> {
+            val str = this.getString(preference.key, null) ?: return preference.default
+            preference.default.decode(str) as T
+        }
         else -> throw IllegalArgumentException("Unsupported type")
     }
 }
@@ -27,5 +36,9 @@ inline fun <reified T> SharedPreferences.Editor.put(preference: Preference<T>, v
         is Long -> this.putLong(preference.key, value)
         is Boolean -> this.putBoolean(preference.key, value)
         is Float -> this.putFloat(preference.key, value)
+        is ICodable -> {
+            this.putString(preference.key, value.encode())
+        }
+        else -> throw IllegalArgumentException("Unsupported type")
     }
 }

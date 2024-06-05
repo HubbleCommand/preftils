@@ -1,3 +1,10 @@
+
+1. [Introduction](#preftils)
+2. [Development](#development)
+3. [Adding Dependency](#adding-dependency)
+4. [Basic Usage](#basic-usage)
+5. [Advanced Usage with ICodable](#advanced-usage-with-icodable)
+
 # Preftils - Kotlin Android Shared Preference Utils
 
 [pkg-url]: https://jitpack.io/#hubblecommand/preftils
@@ -32,7 +39,7 @@ dependencies {
 }
 ```
 
-## Usage
+## Basic Usage
 Check the Instrumented test for sample code. Ideally, you can use this library with a Kotlin object like so:
 ```
 object Preferences {
@@ -53,3 +60,6 @@ with (PreferenceManager.getDefaultSharedPreferences(this).edit()) {
     apply()
 }
 ```
+
+## Advanced usage with `ICodable`
+Custom types are also supported, as long as they implement the `ICodable` interface. Once you have implemented a way to encode & decode your custom class, you can easily use it with SharedPreferences like with the other primitive types. An example is provided in the Instrumented tests as before.
