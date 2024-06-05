@@ -1,6 +1,9 @@
 # Preftils - Kotlin Android Shared Preference Utils
 
-[![](https://jitpack.io/v/HubbleCommand/preftils.svg)](https://jitpack.io/#HubbleCommand/preftils)
+[pkg-url]: https://jitpack.io/#hubblecommand/preftils
+[![Version Badge](https://jitpack.io/v/HubbleCommand/preftils.svg)][pkg-url]
+[![Downloads Badge](https://jitpack.io/v/HubbleCommand/preftils/month.svg)][pkg-url]
+[![License Badge](https://img.shields.io/github/license/HubbleCommand/preftils.svg?color=blue)](https://github.com/hubblecommand/preftils/blob/master/LICENSE)
 
 This is a very simple library that provides type safety when working with Android's [SharedPreferences](https://developer.android.com/training/data-storage/shared-preferences).
 
