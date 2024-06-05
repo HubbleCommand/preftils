@@ -47,9 +47,9 @@ dependencies {
 publishing {
     publications {
         register<MavenPublication>("release") {
-            groupId = "com.hubble"
+            groupId = "com.github.HubbleCommand"
             artifactId = "preftils"
-            version = "1.0"
+            version = "local"
 
             afterEvaluate {
                 from(components["release"])

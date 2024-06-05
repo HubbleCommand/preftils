@@ -13,6 +13,9 @@ While the newer [DataStore](https://developer.android.com/topic/libraries/archit
 
 Due to the implementation, `Set<String>` is not supported due to type erasure of the `String` type of the `Collection`. All other SharedPreference types are supported.
 
+## Development
+When doing local development, make sure to set the version to `local` with `implementation("com.github.HubbleCommand:preftils:local")` as it is set in the module-level `build.gradle.kts`.
+
 ## Adding dependency
 Add jitpack to your repositories in your root build.gradle:
 ```
