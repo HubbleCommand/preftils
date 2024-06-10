@@ -1,4 +1,4 @@
-package com.hubble.preftils
+package com.hubble.preftilsapp
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

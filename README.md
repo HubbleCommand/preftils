@@ -40,7 +40,7 @@ dependencies {
 ```
 
 ## Basic Usage
-Check the Instrumented test for sample code. Ideally, you can use this library with a Kotlin object like so:
+Check the Instrumented tests or the sample app under `app` for sample code. Ideally, you can use this library with a Kotlin object like so:
 ```
 object Preferences {
     val PREF = Preference("pref", 1000L)

@@ -1,3 +1,8 @@
 <resources>
-    <string name="app_name">preftils</string>
+    <string name="app_name">Preftils Sample</string>
+    <string name="tv_label">Fetched Value</string>
+    <string name="tv_value_not_yet_fetched">Not Yet Fetched</string>
+    <string name="set_button_title">Set Pref</string>
+    <string name="get_button_title">Fetch Pref</string>
+    <string name="et_hint">10</string>
 </resources>

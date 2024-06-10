@@ -1,4 +1,4 @@
-package com.hubble.preftils
+package com.hubble.preftilsapp
 
 import org.junit.Test
 
