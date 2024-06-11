@@ -57,7 +57,7 @@ publishing {
     repositories {
         maven {
             name = "com.hubble.preftils"
-            url = uri("${project.buildDir}/repo")
+            url = uri("${project.layout.buildDirectory}/repo")
         }
     }
 }
