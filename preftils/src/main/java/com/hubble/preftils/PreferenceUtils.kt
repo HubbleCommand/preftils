@@ -1,17 +1,34 @@
 package com.hubble.preftils
 
 import android.content.SharedPreferences
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.SerializationException
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
-interface ICodable {
-    fun encode(): String
-    @Throws
-    fun decode(string: String): ICodable
-}
+/**
+ * Wrapper class for handling SharedPreferences. Make sure your custom Kotlin classes have the @Serializable annotation, otherwise you will get runtime errors:
+ *
+ *     kotlinx.serialization.SerializationException: Serializer for class 'SerializablePreferenceType' is not found.
+ *     Please ensure that class is marked as '@Serializable' and that the serialization compiler plugin is applied.
+ *
+ * @property[key] the SharedPreference Key
+ * @property[default] the default value of the preference, also provides concrete type-checkable type
+ */
+@Serializable
+data class Preference<T: Any>(val key: String, val default: T)
 
-data class Preference<T>(val key: String, val default: T)
-
-//TODO see about removing reified for Java interoperability
-inline fun <reified T> SharedPreferences.get(preference: Preference<T>): T {
+/**
+ * Retrieves the value of a preference in a type-safe way
+ *
+ * Propagates errors thrown by Json.decodeFromString() if decoding is impossible
+ *
+ * @param preference the Preference to retrieve
+ *
+ * @throws SerializationException in case of any decoding-specific error
+ * @throws IllegalArgumentException if the decoded input is not a valid instance of [T]
+ */
+inline fun <reified T: Any> SharedPreferences.get(preference: Preference<T>): T {
     return when (preference.default) {
         //Only Preferences type not supported is StringSet
         is String -> this.getString(preference.key, preference.default) as T
@@ -19,16 +36,31 @@ inline fun <reified T> SharedPreferences.get(preference: Preference<T>): T {
         is Long -> this.getLong(preference.key, preference.default) as T
         is Boolean -> this.getBoolean(preference.key, preference.default) as T
         is Float -> this.getFloat(preference.key, preference.default) as T
-        is ICodable -> {
-            val str = this.getString(preference.key, null) ?: return preference.default
-            preference.default.decode(str) as T
+        else -> {
+            println(preference::class.java)
+            if (preference::class.java.isAnnotationPresent(Serializable::class.java)
+                && preference.default::class.java.isAnnotationPresent(Serializable::class.java)) {
+                val str = this.getString(preference.key, null) ?: return preference.default
+                return Json.decodeFromString<T>(str)
+            }
+
+            throw IllegalArgumentException("Unsupported type")
         }
-        else -> throw IllegalArgumentException("Unsupported type")
     }
 }
 
-//fun <T : Any> SharedPreferences.Editor.put(preference: Preference<T>, value: T) {
-inline fun <reified T> SharedPreferences.Editor.put(preference: Preference<T>, value: T) {
+/**
+ * Sets the value of a preference in a type-safe way
+ *
+ * Propagates errors thrown by Json.encodeToString() if encoding of [value] is impossible
+ *
+ * @param[preference] The preference to save
+ * @param[value] The value to set the preference to
+ *
+ * @throws SerializationException in case of any encoding-specific error
+ * @throws IllegalArgumentException if the encoded input is not a valid instance of [T]
+ */
+inline fun <reified T: Any> SharedPreferences.Editor.put(preference: Preference<T>, value: T) {
     when (value) {
         //Only Preferences type not supported is StringSet
         is String -> this.putString(preference.key, value)
@@ -36,9 +68,12 @@ inline fun <reified T> SharedPreferences.Editor.put(preference: Preference<T>, v
         is Long -> this.putLong(preference.key, value)
         is Boolean -> this.putBoolean(preference.key, value)
         is Float -> this.putFloat(preference.key, value)
-        is ICodable -> {
-            this.putString(preference.key, value.encode())
+        else -> {
+            if (preference::class.java.isAnnotationPresent(Serializable::class.java)) {
+                this.putString(preference.key, Json.encodeToString(value))
+                return
+            }
+            throw IllegalArgumentException("Unsupported type")
         }
-        else -> throw IllegalArgumentException("Unsupported type")
     }
 }

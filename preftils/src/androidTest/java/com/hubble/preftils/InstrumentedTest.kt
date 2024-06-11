@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import kotlinx.serialization.Serializable
 
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -35,14 +36,14 @@ class InstrumentedTest {
 
             with (preferences.edit()) {
                 remove(PreferencesTest.NUMBER.key)
-                remove(PreferencesCodableTest.CODABLE.key)
+                remove(PreferencesSerializable.SERIALIZABLE.key)
                 apply()
             }
         }
     }
 
     @Test
-    fun test() {
+    fun testBasic() {
         val initial = preferences.get(PreferencesTest.NUMBER)
         assertEquals(PreferencesTest.NUMBER.default, initial)
 
@@ -67,35 +68,31 @@ class InstrumentedTest {
         }
     }
 
-    class CodableTest(val a: Int, val b: Boolean): ICodable {
-        override fun encode(): String {
-            return "$a,$b"
-        }
+    @Serializable
+    class SerializableType(val a: Int, val b: String)
 
-        override fun decode(string: String): CodableTest {
-            val split = string.split(",")
-            return CodableTest(split[0].toInt(), split[1].toBooleanStrict())
-        }
-    }
-
-    object PreferencesCodableTest {
-        val CODABLE = Preference("codable", CodableTest(17, false))
+    object PreferencesSerializable {
+        val SERIALIZABLE = Preference("serializable", SerializableType(19, "a"))
     }
 
     @Test
-    fun testCodable() {
-        val initial = preferences.get(PreferencesCodableTest.CODABLE)
-        assertEquals(PreferencesCodableTest.CODABLE.default.a, initial.a)
-        assertEquals(PreferencesCodableTest.CODABLE.default.b, initial.b)
+    fun testSerializablePreference() {
+        //Test read
+        val pref : SerializableType = preferences.get(PreferencesSerializable.SERIALIZABLE)
+        assert(pref.a == PreferencesSerializable.SERIALIZABLE.default.a)
+        assert(pref.b == PreferencesSerializable.SERIALIZABLE.default.b)
 
-        val target = CodableTest(20, true)
+        //Test write
+        val newInt = 32
+        val newString = "another string"
         with (preferences.edit()) {
-            put(PreferencesCodableTest.CODABLE, target)
+            put(PreferencesSerializable.SERIALIZABLE, SerializableType(newInt, newString))
             apply()
         }
 
-        val set = preferences.get(PreferencesCodableTest.CODABLE)
-        assertEquals(target.a, set.a)
-        assertEquals(target.b, set.b)
+        //Verify write
+        val prefNew : SerializableType = preferences.get(PreferencesSerializable.SERIALIZABLE)
+        assert(prefNew.a == newInt)
+        assert(prefNew.b == newString)
     }
 }
