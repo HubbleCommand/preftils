@@ -1,7 +1,6 @@
 package com.hubble.preftils;
 
 import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.assertTrue;
 
 import android.content.Context;
 import android.content.SharedPreferences;
