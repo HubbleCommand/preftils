@@ -9,7 +9,7 @@ import kotlinx.serialization.json.Json
 /**
  * Wrapper class for handling SharedPreferences. Make sure your custom Kotlin classes have the @Serializable annotation, otherwise you will get runtime errors:
  *
- *     kotlinx.serialization.SerializationException: Serializer for class 'SerializablePreferenceType' is not found.
+ *     kotlinx.serialization.SerializationException: Serializer for class 'X' is not found.
  *     Please ensure that class is marked as '@Serializable' and that the serialization compiler plugin is applied.
  *
  * @property[key] the SharedPreference Key
@@ -37,9 +37,7 @@ inline fun <reified T: Any> SharedPreferences.get(preference: Preference<T>): T 
         is Boolean -> this.getBoolean(preference.key, preference.default) as T
         is Float -> this.getFloat(preference.key, preference.default) as T
         else -> {
-            println(preference::class.java)
-            if (preference::class.java.isAnnotationPresent(Serializable::class.java)
-                && preference.default::class.java.isAnnotationPresent(Serializable::class.java)) {
+            if (preference.default::class.java.isAnnotationPresent(Serializable::class.java)) {
                 val str = this.getString(preference.key, null) ?: return preference.default
                 return Json.decodeFromString<T>(str)
             }
@@ -69,7 +67,7 @@ inline fun <reified T: Any> SharedPreferences.Editor.put(preference: Preference<
         is Boolean -> this.putBoolean(preference.key, value)
         is Float -> this.putFloat(preference.key, value)
         else -> {
-            if (preference::class.java.isAnnotationPresent(Serializable::class.java)) {
+            if (preference.default::class.java.isAnnotationPresent(Serializable::class.java)) {
                 this.putString(preference.key, Json.encodeToString(value))
                 return
             }
