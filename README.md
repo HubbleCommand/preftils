@@ -3,9 +3,13 @@
 2. [Development](#development)
 3. [Adding Dependency](#adding-dependency)
 4. [Basic Usage](#basic-usage)
-5. [Advanced Usage with ICodable](#advanced-usage-with-icodable)
+5. [Advanced usage with java.io `Serializable` interface](#advanced-usage-with-javaio-serializable)
+6. [Advanced usage with kotlinx `@Serializable` annotation](#advanced-usage-with-kotlinx-serializable)
+
 
 # Preftils - Kotlin Android Shared Preference Utils
+
+[![Beta Badge](https://kotl.in/badges/beta.svg)](https://kotlinlang.org/docs/components-stability.html#stability-of-subcomponents)
 
 [pkg-url]: https://jitpack.io/#hubblecommand/preftils
 [![Version Badge](https://jitpack.io/v/HubbleCommand/preftils.svg)][pkg-url]
@@ -61,5 +65,20 @@ with (PreferenceManager.getDefaultSharedPreferences(this).edit()) {
 }
 ```
 
-## Advanced usage with `ICodable`
-Custom types are also supported, as long as they implement the `ICodable` interface. Once you have implemented a way to encode & decode your custom class, you can easily use it with SharedPreferences like with the other primitive types. An example is provided in the Instrumented tests as before.
+You can achieve similar results in Java. Make sure to use the appropriate Java classes.
+
+## Advanced usage with java.io [`Serializable`](https://docs.oracle.com/javase/8/docs/api/java/io/Serializable.html)
+[`Serializable`](https://docs.oracle.com/javase/8/docs/api/java/io/Serializable.html) is an interface that is part of the [`java.io`](https://docs.oracle.com/javase/8/docs/api/java/io/package-summary.html) package.
+
+Serializability of a class is enabled by the class implementing the java.io.Serializable interface. So, as long as your classes implement the interface (with no required methods), then you are good to go.
+
+You can read more [here](https://www.oracle.com/technical-resources/articles/java/serializationapi.html), including how to write your own serializers.
+
+## Advanced usage with kotlinx [`@Serializable`](https://kotlinlang.org/docs/serialization.html)
+[`Serialization`](https://kotlinlang.org/docs/serialization.html) is a set of Kotlin libraries to simplify [serialization](https://en.wikipedia.org/wiki/Serialization).
+
+Just make sure that your custom classes have the `@Serializable` annotation, and you'll be good. If you want more control, you can also write [custom serializers](https://github.com/Kotlin/kotlinx.serialization/blob/master/docs/serializers.md#custom-serializers) for your classes. You can also serialize [all sorts of primitive types](https://github.com/Kotlin/kotlinx.serialization/blob/master/docs/builtin-classes.md#primitives).
+
+Currently serializes into [JSON](https://github.com/Kotlin/kotlinx.serialization/blob/master/formats/README.md#json) and is planned to make it more format-agnostic once other formats leave the [`experimental` status](https://github.com/Kotlin/kotlinx.serialization/blob/master/formats/README.md).
+
+Be warned of [this](https://github.com/Kotlin/kotlinx.serialization?tab=readme-ov-file#android) in your proguard rules.
