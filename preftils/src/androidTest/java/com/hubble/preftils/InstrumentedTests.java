@@ -84,7 +84,7 @@ public class InstrumentedTests {
     @Test
     public void testJavaSerialization() throws IOException, ClassNotFoundException {
         //Test read
-        SerializableType prefVal = PreferenceUtils.get(preferences, SerializablePreferences.SERIALIZABLE);
+        SerializableType prefVal = SerializablePreferences.SERIALIZABLE.getValue(preferences);
         assertEquals(SerializablePreferences.SERIALIZABLE.getDefault(), prefVal);
 
         //Test write
@@ -92,7 +92,7 @@ public class InstrumentedTests {
         prefVal.integer = newInt;
         String newString = "another string";
         prefVal.string = newString;
-        PreferenceUtils.put(editor, SerializablePreferences.SERIALIZABLE, prefVal);
+        SerializablePreferences.SERIALIZABLE.putValue(editor, prefVal);
 
         //Verify write
         prefVal = PreferenceUtils.get(preferences, SerializablePreferences.SERIALIZABLE);

@@ -35,10 +35,18 @@ public class PreferenceUtils {
             return defaultValue;
         }
 
+        /**
+         * Instance helper that wraps PreferenceUtils.get()
+         * @see PreferenceUtils#get(SharedPreferences, Preference) 
+         */
         public T getValue(SharedPreferences preferences) throws IOException, ClassNotFoundException {
             return get(preferences, this);
         }
 
+        /**
+         * Instance helper that wraps PreferenceUtils.put()
+         * @see PreferenceUtils#put(SharedPreferences.Editor, Preference, Serializable) 
+         */
         public void putValue(SharedPreferences.Editor editor, @NotNull T value) throws IOException {
             put(editor, this, value);
         }
