@@ -7,7 +7,7 @@
 6. [Advanced usage with kotlinx `@Serializable` annotation](#advanced-usage-with-kotlinx-serializable)
 
 
-# Preftils - Kotlin Android Shared Preference Utils
+# Preftils - Android Shared Preference Utils
 
 [![Beta Badge](https://kotl.in/badges/beta.svg)](https://kotlinlang.org/docs/components-stability.html#stability-of-subcomponents)
 
