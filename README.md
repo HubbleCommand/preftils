@@ -70,7 +70,7 @@ You can achieve similar results in Java. Make sure to use the appropriate Java c
 ## Advanced usage with java.io [`Serializable`](https://docs.oracle.com/javase/8/docs/api/java/io/Serializable.html)
 [`Serializable`](https://docs.oracle.com/javase/8/docs/api/java/io/Serializable.html) is an interface that is part of the [`java.io`](https://docs.oracle.com/javase/8/docs/api/java/io/package-summary.html) package.
 
-Serializability of a class is enabled by the class implementing the java.io.Serializable interface. So, as long as your classes implement the interface (with no required methods), then you are good to go.
+Serializability of a class is enabled by the class implementing the `java.io.Serializable` interface. So, as long as your classes implement the interface (with no required methods to implement), then you are good to go.
 
 You can read more [here](https://www.oracle.com/technical-resources/articles/java/serializationapi.html), including how to write your own serializers.
 
