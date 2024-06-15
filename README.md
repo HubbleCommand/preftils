@@ -9,6 +9,9 @@
 
 # Preftils - Android Shared Preference Utils
 
+** WARNING **
+You may see Gradle warnings about sync taking a long time or timing out. This is because if no one has requested the version of the package for an extended period, the build will be deleted, and JitPack will have to rebuild. You can see JitPack build status [here](https://jitpack.io/#hubblecommand/preftils), and retry once it is finished.
+
 [![Beta Badge](https://kotl.in/badges/beta.svg)](https://kotlinlang.org/docs/components-stability.html#stability-of-subcomponents)
 
 [pkg-url]: https://jitpack.io/#hubblecommand/preftils
