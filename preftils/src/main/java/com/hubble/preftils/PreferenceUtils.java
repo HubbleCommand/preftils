@@ -51,6 +51,7 @@ public class PreferenceUtils {
             put(editor, this, value);
         }
     }
+
     /**
      * Retrieves the value of a preference in a type-safe way
      * <p>
