@@ -103,7 +103,7 @@ public class InstrumentedTests {
 
     @Test
     public void testJavaIncompatibleType() throws IOException, ClassNotFoundException {
-        //This will not compile, as NonSerializableType does not implement Serializable
+        //As expected , the following will not compile, as NonSerializableType does not implement Serializable
         //PreferenceUtils.Preference<NonSerializableType> INCOMPATIBLE = new PreferenceUtils.Preference<>("int", new NonSerializableType());
 
         //Primitives supported by SharedPreferences will work as expected
