@@ -21,6 +21,8 @@ You may see Gradle warnings about sync taking a long time or timing out. This is
 
 This is a very simple library that provides type safety when working with Android's [SharedPreferences](https://developer.android.com/training/data-storage/shared-preferences).
 
+You can read more about the development of this package [on my blog page dedicated to it](https://hubblecommand.github.io/projects/preftils.html).
+
 When managing large amounts of SharedPreferences, it can be time-consuming to track the correct types when accessing preference values among hundreds of preferences, without otherwise making utility functions for each preference. This is incredibly verbose, but avoids otherwise critical runtime crashes. This extremely light library avoids these issues by providing a type-safe way of interacting with SharedPreferences.
 
 Due to the implementation, `Set<String>` is not supported due to type erasure of the `String` type of the `Collection`. All other SharedPreference types are supported.
