@@ -24,6 +24,10 @@ public class InstrumentedTests {
         preferences = InstrumentationRegistry.getInstrumentation().getTargetContext().getSharedPreferences("prefs", Context.MODE_PRIVATE);
         editor = preferences.edit();
 
+        clear();
+    }
+
+    public static void clear() {
         editor.remove(BasicPreferences.NUMBER.getKey());
         editor.apply();
         editor.commit();
@@ -44,6 +48,13 @@ public class InstrumentedTests {
 
         //Test write
         PreferenceUtils.put(editor, BasicPreferences.NUMBER, 10);
+    }
+
+    @Test
+    public void testJavaDefaults() throws IOException, ClassNotFoundException {
+        clear();
+        assertEquals(BasicPreferences.NUMBER.getDefault(), PreferenceUtils.get(preferences, BasicPreferences.NUMBER));
+        assertEquals(-3, PreferenceUtils.get(preferences, BasicPreferences.NUMBER, -3).intValue());
     }
 
     public static class SerializableType implements Serializable {

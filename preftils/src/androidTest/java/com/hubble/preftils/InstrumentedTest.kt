@@ -58,6 +58,16 @@ class InstrumentedTest {
     }
 
     @Test
+    fun testDefaults() {
+        with (preferences.edit()) {
+            remove(PreferencesTest.NUMBER.key)
+            apply()
+        }
+        assertEquals(PreferencesTest.NUMBER.default, preferences.get(PreferencesTest.NUMBER))
+        assertEquals(-3, preferences.get(PreferencesTest.NUMBER, -3))
+    }
+
+    @Test
     fun testIncompatibleType() {
         val invalidPreferenceType = Preference("invalid", 20u)
         try {

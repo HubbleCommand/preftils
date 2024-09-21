@@ -53,12 +53,21 @@ public class PreferenceUtils {
     }
 
     /**
+     * Utility wrapper that uses the Preference's defined default value
+     * @see PreferenceUtils#get(SharedPreferences, Preference, T)
+     */
+    static <T extends Serializable> T get(SharedPreferences preferences, Preference<T> preference) throws IOException, ClassNotFoundException {
+        return get(preferences, preference, preference.getDefault());
+    }
+
+    /**
      * Retrieves the value of a preference in a type-safe way
      * <p>
      * Propagates errors thrown by ObjectInputStream.readObject() if decoding is impossible
      *
      * @param preferences instance of SharedPreferences to read from
      * @param preference the preference to read
+     * @param defaultValue the default value to return if no value was found for the key
      * @return the value retrieved in SharedPreferences, or the default value of the [preference] parameter
      *
      * @throws  ClassNotFoundException Class of a serialized object cannot be
@@ -68,22 +77,22 @@ public class PreferenceUtils {
      * @see     ObjectInputStream#readObject()
      */
     @SuppressWarnings("unchecked")
-    static <T extends Serializable> T get(SharedPreferences preferences, Preference<T> preference) throws IOException, ClassNotFoundException {
+    static <T extends Serializable> T get(SharedPreferences preferences, Preference<T> preference, T defaultValue) throws IOException, ClassNotFoundException {
         if (preference.getDefault() instanceof Integer) {
-            return (T) (Integer) preferences.getInt(preference.getKey(), (Integer) preference.getDefault());
+            return (T) (Integer) preferences.getInt(preference.getKey(), (Integer) defaultValue);
         } else if (preference.getDefault() instanceof Long) {
-            return (T) (Long) preferences.getLong(preference.getKey(), (Long) preference.getDefault());
+            return (T) (Long) preferences.getLong(preference.getKey(), (Long) defaultValue);
         } else if (preference.getDefault() instanceof Float) {
-            return (T) (Float) preferences.getFloat(preference.getKey(), (Float) preference.getDefault());
+            return (T) (Float) preferences.getFloat(preference.getKey(), (Float) defaultValue);
         } else if (preference.getDefault() instanceof Boolean) {
-            return (T) (Boolean) preferences.getBoolean(preference.getKey(), (Boolean) preference.getDefault());
+            return (T) (Boolean) preferences.getBoolean(preference.getKey(), (Boolean) defaultValue);
         } else if (preference.getDefault() instanceof String) {
-            return (T) preferences.getString(preference.getKey(), (String) preference.getDefault());
+            return (T) preferences.getString(preference.getKey(), (String) defaultValue);
         } else {
             String string = preferences.getString(preference.getKey(), null);
 
             if (string == null) {
-                return preference.getDefault();
+                return defaultValue;
             }
 
             ByteArrayInputStream inStream = new ByteArrayInputStream(string.getBytes());

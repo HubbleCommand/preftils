@@ -28,17 +28,17 @@ data class Preference<T: Any>(val key: String, val default: T)
  * @throws SerializationException in case of any decoding-specific error
  * @throws IllegalArgumentException if the decoded input is not a valid instance of [T]
  */
-inline fun <reified T: Any> SharedPreferences.get(preference: Preference<T>): T {
+inline fun <reified T: Any> SharedPreferences.get(preference: Preference<T>, default: T = preference.default): T {
     return when (preference.default) {
         //Only Preferences type not supported is StringSet
-        is String -> this.getString(preference.key, preference.default) as T
-        is Int -> this.getInt(preference.key, preference.default) as T
-        is Long -> this.getLong(preference.key, preference.default) as T
-        is Boolean -> this.getBoolean(preference.key, preference.default) as T
-        is Float -> this.getFloat(preference.key, preference.default) as T
+        is String -> this.getString(preference.key, default as String) as T
+        is Int -> this.getInt(preference.key, default as Int) as T
+        is Long -> this.getLong(preference.key, default as Long) as T
+        is Boolean -> this.getBoolean(preference.key, default as Boolean) as T
+        is Float -> this.getFloat(preference.key, default as Float) as T
         else -> {
             if (preference.default::class.java.isAnnotationPresent(Serializable::class.java)) {
-                val str = this.getString(preference.key, null) ?: return preference.default
+                val str = this.getString(preference.key, null) ?: return default
                 return Json.decodeFromString<T>(str)
             }
 
