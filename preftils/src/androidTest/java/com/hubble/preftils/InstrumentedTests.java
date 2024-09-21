@@ -1,12 +1,22 @@
 package com.hubble.preftils;
 
+import static com.hubble.preftils.DataStoreUtils.preferenceToKey;
 import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertNull;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.datastore.core.DataStore;
+//import androidx.datastore.core.DataStoreImpl;
+//import androidx.datastore.preferences.PreferenceDataStoreSingletonDelegate;
+import androidx.datastore.preferences.core.MutablePreferences;
+import androidx.datastore.preferences.core.PreferenceDataStoreFactory;
+import androidx.datastore.preferences.core.Preferences;
+import androidx.datastore.preferences.rxjava3.RxPreferenceDataStoreBuilder;
+import androidx.datastore.rxjava3.RxDataStore;
 import androidx.test.platform.app.InstrumentationRegistry;
 
 import org.junit.BeforeClass;
@@ -15,13 +25,29 @@ import org.junit.Test;
 import java.io.IOException;
 import java.io.Serializable;
 
+import io.reactivex.rxjava3.core.Single;
+
 public class InstrumentedTests {
     static SharedPreferences preferences;
     static SharedPreferences.Editor editor;
+    static RxDataStore<Preferences> store;
+    static Context context;
 
     @BeforeClass
     public static void setup(){
-        preferences = InstrumentationRegistry.getInstrumentation().getTargetContext().getSharedPreferences("prefs", Context.MODE_PRIVATE);
+        context = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        /*store = PreferenceDataStoreFactory.INSTANCE.create(
+                produceFile = () -> context.pre(DATASTORE_NAME)
+        );*/
+        //store = PreferenceDataStoreSingletonDelegate
+        store = new RxPreferenceDataStoreBuilder(context, /*name=*/ "settings").build();
+        store.updateDataAsync(prefsIn -> {
+            MutablePreferences mutablePreferences = prefsIn.toMutablePreferences();
+            mutablePreferences.remove(preferenceToKey(BasicPreferences.NUMBER));
+            return Single.just(mutablePreferences);
+        });
+
+        preferences = context.getSharedPreferences("prefs", Context.MODE_PRIVATE);
         editor = preferences.edit();
 
         editor.remove(BasicPreferences.NUMBER.getKey());
@@ -118,5 +144,18 @@ public class InstrumentedTests {
         assertEquals(PreferenceUtils.get(preferences, lng), (Long) 10L);
         assertEquals(PreferenceUtils.get(preferences, bln), (Boolean) true);
         assertEquals(PreferenceUtils.get(preferences, flt), 10f);
+    }
+
+    @Test
+    public void testDataStore() {
+        assertNull(store.data().blockingFirst().get(preferenceToKey(BasicPreferences.NUMBER)));
+
+        Single<Preferences> updateResult = store.updateDataAsync(prefsIn -> {
+            MutablePreferences mutablePreferences = prefsIn.toMutablePreferences();
+            mutablePreferences.set(preferenceToKey(BasicPreferences.NUMBER), 3);
+            return Single.just(mutablePreferences);
+        });
+
+        assertEquals(3, updateResult.blockingGet().get(preferenceToKey(BasicPreferences.NUMBER)).intValue());
     }
 }
