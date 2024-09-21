@@ -12,6 +12,15 @@ import org.junit.runner.RunWith
 import org.junit.Assert.*
 import org.junit.BeforeClass
 
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.preferencesDataStore
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
+
+
 /**
  * Instrumented test, which will execute on an Android device.
  *
@@ -26,18 +35,28 @@ class InstrumentedTest {
     }
 
     companion object {
+        lateinit var context: Context
         lateinit var preferences: SharedPreferences
+
+        private const val PREFERENCES_NAME = "my_preferences"
+        private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = PREFERENCES_NAME)
 
         @BeforeClass
         @JvmStatic
         internal fun initialize() {
-            val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-            preferences = appContext.applicationContext.getSharedPreferences("prefs", Context.MODE_PRIVATE)
+            context = InstrumentationRegistry.getInstrumentation().targetContext
+            preferences = context.applicationContext.getSharedPreferences("prefs", Context.MODE_PRIVATE)
 
             with (preferences.edit()) {
                 remove(PreferencesTest.NUMBER.key)
                 remove(PreferencesSerializable.SERIALIZABLE.key)
                 apply()
+            }
+
+            runBlocking {
+                context.dataStore.edit { preferences ->
+                    preferences.remove(PreferencesTest.NUMBER.asPreferenceKey())
+                }
             }
         }
     }
@@ -94,5 +113,14 @@ class InstrumentedTest {
         val prefNew : SerializableType = preferences.get(PreferencesSerializable.SERIALIZABLE)
         assert(prefNew.a == newInt)
         assert(prefNew.b == newString)
+    }
+
+    @Test
+    fun testDataStore() = runTest {
+        assertEquals(PreferencesTest.NUMBER.default, context.dataStore.data.first().get(PreferencesTest.NUMBER))
+        context.dataStore.edit { mutablePreferences ->
+            mutablePreferences.put(PreferencesTest.NUMBER, 3)
+        }
+        assertEquals(3, context.dataStore.data.first().get(PreferencesTest.NUMBER))
     }
 }
