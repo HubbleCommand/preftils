@@ -42,7 +42,7 @@ inline fun <reified T: Any> SharedPreferences.get(preference: Preference<T>): T 
                 return Json.decodeFromString<T>(str)
             }
 
-            throw IllegalArgumentException("Unsupported type")
+            throw IllegalArgumentException("Unsupported type: ${preference.default::class.qualifiedName}")
         }
     }
 }
@@ -71,7 +71,7 @@ inline fun <reified T: Any> SharedPreferences.Editor.put(preference: Preference<
                 this.putString(preference.key, Json.encodeToString(value))
                 return
             }
-            throw IllegalArgumentException("Unsupported type")
+            throw IllegalArgumentException("Unsupported type: ${preference.default::class.qualifiedName}")
         }
     }
 }
