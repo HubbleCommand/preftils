@@ -23,9 +23,6 @@ This is a very simple library that provides type safety when working with Androi
 
 When managing large amounts of SharedPreferences, it can be time-consuming to track the correct types when accessing preference values among hundreds of preferences, without otherwise making utility functions for each preference. This is incredibly verbose, but avoids otherwise critical runtime crashes. This extremely light library avoids these issues by providing a type-safe way of interacting with SharedPreferences.
 
-While the newer [DataStore](https://developer.android.com/topic/libraries/architecture/datastore) does provide type safety through [Proto DataStore](https://developer.android.com/codelabs/android-proto-datastore#5), it as a little obtuse.
-Additionally, SharedPreferences remains a very popular and approachable way of managing long-duration state in Android.
-
 Due to the implementation, `Set<String>` is not supported due to type erasure of the `String` type of the `Collection`. All other SharedPreference types are supported.
 
 ## Development
