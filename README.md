@@ -6,6 +6,7 @@
 5. [Advanced usage with java.io `Serializable` interface](#advanced-usage-with-javaio-serializable)
 6. [Advanced usage with kotlinx `@Serializable` annotation](#advanced-usage-with-kotlinx-serializable)
 
+> The flutter version of this can be found [here](https://github.com/HubbleCommand/preftils_fl)
 
 # Preftils - Android Shared Preference Utils
 
