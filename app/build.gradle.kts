@@ -36,7 +36,7 @@ android {
 }
 
 dependencies {
-    implementation("androidx.core:core-ktx:1.13.1")
+    implementation("androidx.core:core-ktx:1.15.0")
     //Use this line to get remove Preftils
     //implementation("com.github.hubblecommand:preftils:v1.2.1")
     //Use this line to get local Preftils
